@@ -33,4 +33,21 @@ class ToonTroveBotService:
         amount = []
         for i in range(4):
             amount.append(int(file_amount.readline().strip()[-1]))
+        file_amount.close()
         return amount
+
+    def get_shop_data(self):
+        file_shop = open("shop.properties", "r", encoding="utf-8")
+        shop_offer_amount = int(file_shop.readline().strip()[-1])
+        shop_offers = []
+        for i in range(shop_offer_amount):
+            number = int(file_shop.readline())
+            picture = file_shop.readline().strip().split()[-1]
+            text = file_shop.readline().strip()[7:]
+            price = int(file_shop.readline().strip().split()[-1])
+            reward = tuple(file_shop.readline().strip().split()[-1].split(";"))
+            shop_offers.append((picture, text, price, reward))
+        file_shop.close()
+        return tuple(shop_offers)
+
+

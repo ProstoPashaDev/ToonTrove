@@ -10,8 +10,11 @@ bot = TeleBot(token)
 
 main_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 std_markup = types.InlineKeyboardMarkup()
+shop_markup_list = []
 
 toonTroveBotService = ToonTroveBotService()
+
+shop_data = toonTroveBotService.get_shop_data()
 
 dict_rarity = {"1": "common", "2": "rare", "3": "specific", "4": "legendary"}
 dict_ttc = {"1": "1", "2": "5", "3": "15", "4": "50"}
@@ -23,7 +26,6 @@ username = ""
 def initialize_bot():
     main_markup.add(types.KeyboardButton(text="Watch the movie"), types.KeyboardButton(text="Collection"),
                     types.KeyboardButton(text="Toon Trove studio"))
-
     std_markup.add(types.InlineKeyboardButton(text="Influence", callback_data='influence'))
     std_markup.add(types.InlineKeyboardButton(text="My account", callback_data='my_account'))
     std_markup.add(types.InlineKeyboardButton(text="Squads", callback_data='squads'))
@@ -33,6 +35,17 @@ def initialize_bot():
     std_markup.add(types.InlineKeyboardButton(text="Pass", callback_data='pass'))
     std_markup.add(types.InlineKeyboardButton(text="Trade", callback_data='trade'))
     std_markup.add(types.InlineKeyboardButton(text="Donat", callback_data='donat'))
+
+    for i in range(len(shop_data)):
+        shop_markup = types.InlineKeyboardMarkup()
+        shop_markup.add(types.InlineKeyboardButton(text=f"{shop_data[i][2]} TTC", callback_data="offer1"))
+        shop_markup.add(types.InlineKeyboardButton(text="<<", callback_data=f"<<{i}"), types.InlineKeyboardButton(text=f"{i+1}/{len(shop_data)}", callback_data="9/9"), types.InlineKeyboardButton(text=">>", callback_data=f">>{i}"))
+
+
+        shop_markup_list.append(shop_markup)
+    #смена маркапов переключение на стрелочки
+
+
 
 
 @bot.message_handler(commands=['start'])
@@ -75,6 +88,14 @@ def ttstd_ans(callback):
             bot.send_message(callback.message.chat.id, text="1) Pav 9999999999999999999\n2) Ivn 9999999999999999998")
         elif (callback.data == "my_account"):
             bot.send_message(callback.message.chat.id, text="Reading from db")
+        elif (callback.data == "shop"):
+            bot.send_photo(callback.message.chat.id, caption=shop_data[0][1], photo=open(shop_data[0][0], "rb"), reply_markup=shop_markup_list[0])
+            print(toonTroveBotService.get_shop_data())
+
+        elif (callback.data == ">>0"):
+            bot.edit_message_media(media=types.InputMediaPhoto(open(shop_data[1][0], "rb")), chat_id=callback.message.chat.id, message_id=callback.message.message_id, reply_markup=shop_markup_list[1])
+            bot.edit_message_caption(caption=shop_data[1][1], chat_id=callback.message.chat.id, message_id=callback.message.message_id, reply_markup=shop_markup_list[1])
+
 
 
 def start_bot():
