@@ -83,43 +83,28 @@ def main_btn_ans(message):
 @bot.callback_query_handler(func=lambda callback: True)
 def ttstd_ans(callback):
     if callback.message:
-        """
-        if (callback.data == "influence"):
+        if callback.data == "influence":
             bot.send_message(callback.message.chat.id, text="Топ игроков")
-            bot.send_message(callback.message.chat.id, text="1) Pav 9999999999999999999\n2) Ivn 9999999999999999998")
-        elif (callback.data == "my_account"):
+            bot.send_message(callback.message.chat.id,
+                             text="1) Pav 9999999999999999999\n2) Ivn 9999999999999999998")
+        elif callback.data == "my_account":
             bot.send_message(callback.message.chat.id, text="Reading from db")
-        elif (callback.data == "shop"):
-            bot.send_photo(callback.message.chat.id, caption=shop_data[0][1], photo=open(shop_data[0][0], "rb"), reply_markup=shop_markup_list[0])
+        elif callback.data == "shop":
+            bot.send_photo(callback.message.chat.id, caption=shop_data[0][1], photo=open(shop_data[0][0], "rb"),
+                           reply_markup=shop_markup_list[0])
             print(toonTroveBotService.get_shop_data())
-
-        elif (callback.data == ">>0"):
-            bot.edit_message_media(media=types.InputMediaPhoto(open(shop_data[1][0], "rb")), chat_id=callback.message.chat.id, message_id=callback.message.message_id, reply_markup=shop_markup_list[1])
-            bot.edit_message_caption(caption=shop_data[1][1], chat_id=callback.message.chat.id, message_id=callback.message.message_id, reply_markup=shop_markup_list[1])
-        """
-        match callback.data:
-            case "influence":
-                bot.send_message(callback.message.chat.id, text="Топ игроков")
-                bot.send_message(callback.message.chat.id,
-                                 text="1) Pav 9999999999999999999\n2) Ivn 9999999999999999998")
-            case "my_account":
-                bot.send_message(callback.message.chat.id, text="Reading from db")
-            case "shop":
-                bot.send_photo(callback.message.chat.id, caption=shop_data[0][1], photo=open(shop_data[0][0], "rb"),
-                               reply_markup=shop_markup_list[0])
-                print(toonTroveBotService.get_shop_data())
-            case ">>0":
-                change_shop_offer(1, callback)
-            case ">>1":
-                change_shop_offer(2, callback)
-            case ">>2":
-                change_shop_offer(0, callback)
-            case "<<0":
-                change_shop_offer(2, callback)
-            case "<<1":
-                change_shop_offer(0, callback)
-            case "<<2":
-                change_shop_offer(1, callback)
+        elif callback.data == ">>0":
+            change_shop_offer(1, callback)
+        elif callback.data == ">>1":
+            change_shop_offer(2, callback)
+        elif callback.data == ">>2":
+            change_shop_offer(0, callback)
+        elif callback.data == "<<0":
+            change_shop_offer(2, callback)
+        elif callback.data == "<<1":
+            change_shop_offer(0, callback)
+        elif callback.data == "<<2":
+            change_shop_offer(1, callback)
 
 def change_shop_offer(offer_number, callback):
     bot.edit_message_media(media=types.InputMediaPhoto(open(shop_data[offer_number][0], "rb")),
